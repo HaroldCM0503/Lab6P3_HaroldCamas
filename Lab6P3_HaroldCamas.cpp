@@ -1,12 +1,16 @@
 #include <iostream>
 #include "Isla.h"
+#include "Juego.h"
+#include "Cazador.h"
 using namespace std;
 
 int main()
 {
-	char matriz[5][5];
-	char* m = matriz[0];
-	Isla i = Isla(5, m);
-	i.generarIsla();
-	i.mostrarIsla();
+	Juego j;
+	j.iniciarJuego();
+	bool continuarJuego = true;
+	while (continuarJuego)
+	{
+
+	}
 }

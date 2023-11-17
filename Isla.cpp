@@ -8,12 +8,31 @@ Isla::Isla(int d, char* m)
     this->matriz = m;
 }
 
+Isla::Isla()
+{
+}
+
+Isla::~Isla()
+{
+}
+
+int Isla::getDimension()
+{
+    return dimension;
+}
+
+char* Isla::getMatriz()
+{
+    return matriz;
+}
+
 void Isla::generarIsla()
 {
-    int cant_trampas = (dimension * dimension) / 2;
+    
     int x = 0;
     int y = 0;
     srand(time(0));
+    int cant_trampas = (dimension * dimension) / 2 + rand();
     for (int i = 0; i <= cant_trampas; i++)
     {
         x = rand() % (dimension);

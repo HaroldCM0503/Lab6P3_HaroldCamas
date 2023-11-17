@@ -7,9 +7,11 @@ class Juego
 	Cazador cazador2;
 	Isla isla;
 public:
+	Juego();
+	~Juego();
 	void iniciarJuego();
 	void activarTrampa();
-	void CazadorTurno();
+	void CazadorTurno(Cazador cazador);
 	void mover();
 	void interactuar();
 };

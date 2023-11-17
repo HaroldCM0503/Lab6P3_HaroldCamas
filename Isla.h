@@ -6,8 +6,12 @@ private:
 	char* matriz;
 public:
 	Isla(int d, char* m);
-	//Isla();
-	//~Isla();
+	Isla();
+	~Isla();
+
+	int getDimension();
+	char* getMatriz();
+
 	void generarIsla();
 	void mostrarIsla();
 };
