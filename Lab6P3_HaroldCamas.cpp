@@ -8,9 +8,4 @@ int main()
 {
 	Juego j;
 	j.iniciarJuego();
-	bool continuarJuego = true;
-	while (continuarJuego)
-	{
-
-	}
 }

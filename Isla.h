@@ -3,14 +3,14 @@ class Isla
 {
 private:
 	int dimension;
-	char* matriz;
+	char** matriz;
 public:
-	Isla(int d, char* m);
+	Isla(int d, char** m);
 	Isla();
 	~Isla();
 
 	int getDimension();
-	char* getMatriz();
+	char** getMatriz();
 
 	void generarIsla();
 	void mostrarIsla();

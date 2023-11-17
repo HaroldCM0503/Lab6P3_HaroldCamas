@@ -12,7 +12,9 @@ public:
 	void iniciarJuego();
 	void activarTrampa();
 	void CazadorTurno(Cazador cazador);
-	void mover();
+	void mover(int move, Cazador c);
 	void interactuar();
+
+	bool movimientoValido(int move, Cazador c);
 };
 
