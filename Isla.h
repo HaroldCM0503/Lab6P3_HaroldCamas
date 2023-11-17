@@ -5,7 +5,10 @@ private:
 	int dimension;
 	char* matriz;
 public:
-	char* generarIsla(char*);
-	void mostrarIsla(char*);
+	Isla(int d, char* m);
+	//Isla();
+	//~Isla();
+	void generarIsla();
+	void mostrarIsla();
 };
 
