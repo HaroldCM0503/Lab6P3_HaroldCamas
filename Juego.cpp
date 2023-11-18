@@ -4,6 +4,8 @@
 #include <random>
 using namespace std;
 
+static char casilla_ocupada1 = '-';
+static char casilla_ocupada2 = '-';
 Juego::Juego()
 {
 }
@@ -65,21 +67,70 @@ void Juego::iniciarJuego()
 	isla.mostrarIsla();
 
 	bool continuarJuego = true;
+	Cazador* Ptc1 = &cazador1;
+	Cazador* Ptc2 = &cazador2;
 	while (continuarJuego)
 	{
-		CazadorTurno(cazador1);
-		CazadorTurno(cazador2);
+
+		if (Ptc1->getMovimientos() != 0 && Ptc1->getVida() != 0)
+		{
+			CazadorTurno(Ptc1);
+			if (casilla_ocupada1 == 'X')
+			{
+				cout << "El jugador 1 ha alcanzado el tesoro!!!!!";
+				continuarJuego = false;
+				break;
+			}
+		}
+
+		if (Ptc2->getMovimientos() != 0 && Ptc2->getVida() != 0)
+		{
+			if (Ptc2->getVida() == 0)
+			{
+
+			}
+			else
+			{
+				CazadorTurno(Ptc2);
+				if (casilla_ocupada2 == 'X')
+				{
+					cout << "El jugador 2 ha alcanzado el tesoro!!!!!";
+					continuarJuego = false;
+					break;
+				}
+			}
+		}
+
+		if (Ptc1->getMovimientos() != 0 && Ptc2->getMovimientos() != 0)
+		{
+			cout << "A ambos jugadores se les acabaron los movimientos!!!" << endl;
+			cout << "Es un empate";
+			break;
+		}
 	}
+	cout << "XD?";
+	delete Ptc1;
+	delete Ptc2;
 }
 
-void Juego::CazadorTurno(Cazador cazador)
+void Juego::activarTrampa(Cazador *c)
+{
+	srand(time(NULL));
+	int daño = 1 + rand() % 50;
+	c->setVida(c->getVida() - daño);
+	cout << "La trampa te ha causado " << daño << " de daño!!!";
+	cout << endl << "Te queda " << c->getVida() << " de vida" << endl;
+}
+
+void Juego::CazadorTurno(Cazador *cazador)
 {
 	int movimiento;
 	cout << endl;
-	cout << "Turno del cazador " << cazador.getTurno() << "(" << cazador.getNombre() << ")";
-	cout << endl << "Movimientos: " << cazador.getMovimientos();
-	cout << endl << "Vida restante: " << cazador.getVida();
+	cout << "Turno del cazador " << (*cazador).getTurno() << "(" << (*cazador).getNombre() << ")";
+	cout << endl << "Movimientos: " << (*cazador).getMovimientos();
+	cout << endl << "Vida restante: " << (*cazador).getVida();
 
+	//1:Arriba  2:Derecha  3:Abajo  4:Izquierda
 	bool isValid;
 	do
 	{
@@ -93,47 +144,83 @@ void Juego::CazadorTurno(Cazador cazador)
 	isla.mostrarIsla();
 }
 
-void Juego::mover(int move, Cazador c)
+void Juego::mover(int move, Cazador *c)
 {
-	int pos_x = c.getX();
-	int pos_y = c.getY();
-	isla.getMatriz()[pos_x][pos_y] = '-';
+	int pos_x = c->getX();
+	int pos_y = c->getY();
+	if (c->getTurno() == 1)
+	{
+		isla.getMatriz()[pos_x][pos_y] = casilla_ocupada1;
+	}
+	else
+	{
+		isla.getMatriz()[pos_x][pos_y] = casilla_ocupada2;
+	}
 	switch (move)
 	{
 		case 1:
-		{
-			pos_y--;
-			break;
-		}
-		case 2:
-		{
-			pos_x++;
-			break;
-		}
-		case 3:
-		{
-			pos_y++;
-			break;
-		}
-		case 4:
 		{
 			pos_x--;
 			break;
 		}
+		case 2:
+		{
+			pos_y++;
+			break;
+		}
+		case 3:
+		{
+			pos_x++;
+			break;
+		}
+		case 4:
+		{
+			pos_y--;
+			break;
+		}
 	}
-
-	c.setX(pos_x);
-	c.setY(pos_y);
-	isla.getMatriz()[pos_x][pos_y] = c.getNombre().at(0);
+	if (c->getTurno() == 1)
+	{
+		cazador1.setX(pos_x);
+		cazador1.setY(pos_y);
+		casilla_ocupada1 = isla.getMatriz()[pos_x][pos_y];
+	}
+	else
+	{
+		cazador2.setX(pos_x);
+		cazador2.setY(pos_y);
+		casilla_ocupada2 = isla.getMatriz()[pos_x][pos_y];
+	}
+	isla.getMatriz()[pos_x][pos_y] = c->getNombre().at(0);
+	interactuar(c);
+	c->setMovimientos(c->getMovimientos() - 1);
 }
 
-bool Juego::movimientoValido(int move, Cazador c)
+void Juego::interactuar(Cazador *c)
+{
+	if (c->getTurno() == 1)
+	{
+		if (casilla_ocupada1 == '#')
+		{
+			activarTrampa(c);
+		}
+	}
+	else
+	{
+		if (casilla_ocupada2 == '#')
+		{
+			activarTrampa(c);
+		}
+	}
+}
+
+bool Juego::movimientoValido(int move, Cazador *c)
 {
 	switch (move)
 	{
 		case 1:
 		{
-			if (c.getY() - 1 < 0)
+			if (c->getX() - 1 < 0)
 				return false;	
 			else
 				return true;
@@ -141,7 +228,7 @@ bool Juego::movimientoValido(int move, Cazador c)
 		}
 		case 2:
 		{
-			if (c.getX() + 1 >= isla.getDimension())
+			if (c->getY() + 1 >= isla.getDimension())
 				return false;
 			else
 				return true;
@@ -149,7 +236,7 @@ bool Juego::movimientoValido(int move, Cazador c)
 		}
 		case 3:
 		{
-			if (c.getY() + 1 >= isla.getDimension())
+			if (c->getX() + 1 >= isla.getDimension())
 				return false;
 			else
 				return true;
@@ -157,7 +244,7 @@ bool Juego::movimientoValido(int move, Cazador c)
 		}
 		case 4:
 		{
-			if (c.getX() - 1 < 0)
+			if (c->getY() - 1 < 0)
 				return false;
 			else
 				return true;

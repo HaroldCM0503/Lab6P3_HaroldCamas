@@ -10,11 +10,11 @@ public:
 	Juego();
 	~Juego();
 	void iniciarJuego();
-	void activarTrampa();
-	void CazadorTurno(Cazador cazador);
-	void mover(int move, Cazador c);
-	void interactuar();
+	void activarTrampa(Cazador *c);
+	void CazadorTurno(Cazador *cazador);
+	void mover(int move, Cazador *c);
+	void interactuar(Cazador *c);
 
-	bool movimientoValido(int move, Cazador c);
+	bool movimientoValido(int move, Cazador *c);
 };
 
